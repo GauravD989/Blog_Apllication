@@ -369,7 +369,7 @@ class CustomDeleteView(DeleteView, FormMixin):
         self.object.is_restored = False
         self.object.save()
 
-        self.object.delete()
+        self.object.delete() # delete the blog from Blog Model
 
         return HttpResponseRedirect(self.get_success_url())
 
