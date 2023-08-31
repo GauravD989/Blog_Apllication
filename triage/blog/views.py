@@ -49,8 +49,10 @@ def my_blogs(request):
     
 def category_blogs(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
+    print(category)
 
-    blogs = Blog.objects.filter(category=category.name).order_by('-created_at')
+    blogs = Blog.objects.filter(category=category).order_by('-created_at')
+    print(blogs)
 
     items_per_page = 9  
     
@@ -89,7 +91,7 @@ def search_blogs(request):
     query = request.GET.get('q')
     
     if query:
-        blogs = Blog.objects.filter(Q(title__icontains=query) | Q(content__icontains=query) | Q(category__icontains=query))
+        blogs = Blog.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
 
     else:
         blogs = []

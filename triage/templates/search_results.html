@@ -1,0 +1,29 @@
+{% extends "base2.html" %}
+{% block title %}
+Search Results
+{% endblock title %}
+
+{% block content %} {% endblock content %}
+
+{% block body %}
+
+<div class="container mt-4">
+    <h2>Search Results for "{{ query }}"</h2>
+    <hr>
+    {% if blogs %}
+        <ul class="list-group">
+            {% for blog in blogs %}
+                <li class="list-group-item">
+                    <h4><a href="{% url 'readmore' id=blog.pk %}">{{ blog.title }}</a></h4>
+                    <p>{{ blog.content|safe|truncatechars:150 }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+</div>
+
+{% endblock body %}
+
+

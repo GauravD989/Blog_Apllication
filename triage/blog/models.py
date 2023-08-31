@@ -10,24 +10,6 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
-class Blog(models.Model):
-    title = models.CharField(max_length=255)
-    content = RichTextField(blank=True, null=True)
-    category = models.CharField(max_length=50, default="")
-    
-
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    image = models.ImageField(upload_to='shop/images', blank=True, null=True, default="")
-
-    tags = models.ManyToManyField(to=Tag, blank=True)
-    
-    def __str__(self):
-        return self.title
-    
-
 class Category(models.Model):
     name = models.CharField(max_length=255)
     content = models.CharField(max_length=255)
@@ -40,6 +22,23 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+class Blog(models.Model):
+    title = models.CharField(max_length=255)
+    content = RichTextField(blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    image = models.ImageField(upload_to='shop/images', blank=True, null=True, default="")
+
+    tags = models.ManyToManyField(to=Tag, blank=True)
+    
+    def __str__(self):
+        return self.title
+    
+    
 
     
     
