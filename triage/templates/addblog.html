@@ -1,21 +1,56 @@
-{% extends 'base2.html' %}
+{% extends 'dashboardbase.html' %}
 
 {% block title %}Add Blog{% endblock title %}
 
 {% load static %}
 
-{% block content %}
-<style>
- 
-</style>
-{% endblock content %}
 
 {% block body %}
+<style>
 
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card bg-light p-3">
+  #table-own {
+    max-width: 1057px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-right: 200px; 
+  }
+  .table {
+    font-size: 14px;
+  }
+  .dashboard-bg {
+    background: linear-gradient(to bottom, #007bff, #00bfff);
+  }
+  /* New style for blue text */
+  .blue-text {
+    color: #007bff;
+  }
+  
+  /* Add border to left and right sides */
+  .table-container {
+    border: 1px solid #ddd;
+  }
+
+  .mb-4.blue-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #add-blog-btn{
+    border: 2px solid black;
+    
+  }
+</style>
+  
+{% endblock %}
+
+
+{% block content %}
+
+<div class="table-container" id="table-own">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
 
         {% for message in messages %}
           <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
@@ -29,7 +64,28 @@
         <form method="POST" enctype="multipart/form-data">
           {% csrf_token %}
           {{ form.media }}
-          {{ form.as_p }}
+          {{ form.title.label_tag }}
+          {{ form.title }}<br><br>
+          {{ form.author.label_tag }}
+          {{ form.author }}<br><br>
+          {{ form.content.label_tag }}
+          {{ form.content }}<br><br>
+          {{ form.category.label_tag }}
+          {{ form.category }}<br>
+
+          If not in dropdown! Add Category:
+          <a href="/addcategory/">Add Category</a><br><br>
+
+          {{ form.tags.label_tag }}
+          <div class="tags-input-container">
+            <input type="text" id="id_tags" name="{{ form.tags.name }}" class="tags-input" value="{{ form.tags.value }}" placeholder="write some tags">
+          </div>
+          
+
+          
+          {{ form.image.label_tag }}<br>
+          {{ form.image }}<br><br>
+
           <button class="btn btn-primary">Post</button>
         </form>
 
@@ -38,4 +94,35 @@
   </div>
 </div>
 
-{% endblock body %}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var inputElm = document.querySelector('.tags-input');
+    var tagSuggestions = {{ tag_suggestions|safe }};
+    
+    // Initialize Tagify on the input field
+    var tagify = new Tagify(inputElm, {
+      enforceWhitelist: true,
+      whitelist: tagSuggestions, // Use tag suggestions provided by the context
+    });
+    
+    // Use mockAjax or your own function to fetch tag suggestions
+    function fetchTags(query) {
+      return fetch('/tag-suggestions/?q=' + query)
+        .then(response => response.json());
+    }
+    
+    tagify.on('input', async (e) => {
+      const query = e.detail.value;
+      const suggestions = await fetchTags(query);
+
+      console.log(suggestions, 'suggestions')
+
+      tagify.settings.whitelist = suggestions;
+      tagify.dropdown.show(query);
+    });
+  }); </script>
+  
+  
+
+{% endblock content %}
+

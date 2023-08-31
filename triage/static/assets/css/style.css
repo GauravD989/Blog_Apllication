@@ -1,0 +1,278 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.category-blog {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.category-blog h3 {
+  font-size: 1.5rem;
+  margin-top: 10px;
+}
+
+.category-blog p {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+body {
+  padding-top: 70px; /* Add padding to body to make space for the fixed navbar */
+}
+
+/* Styling for the fixed navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  transition: top 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+/* Styling for the navbar animation when scrolling down */
+.navbar.hidden {
+  top: -70px; /* Hide the navbar above the viewport */
+}
+
+
+/* Dashboard */
+
+.table-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  margin-right: 200px; 
+}
+.table {
+  font-size: 14px;
+}
+.dashboard-bg {
+  background: linear-gradient(to bottom, #007bff, #00bfff);
+}
+.clickable-link {
+  cursor: pointer;
+  transition: color 0.3s; /* Add transition for smooth color change */
+  color: #000; /* Set initial text color */
+}
+.clickable-link:hover {
+  color: #555; /* Change text color on hover */
+}
+
+/* Readmore CSS */
+
+
+.read-more-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.read-more-card {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  width: 100%;
+}
+
+.read-more-title {
+  color: #dc3545;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.read-more-author {
+  color: #343a40;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.read-more-content {
+  color: #6c757d;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.image-container {
+  height: 200px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.image-container img {
+  object-fit: contain; 
+  width: 100%;
+  height: 100%;
+}
+
+.card-body {
+  height: 220px; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination a {
+  color: #007bff;
+  text-decoration: none;
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+}
+
+.pagination a:hover {
+  background-color: #f2f2f2;
+}
+
+.pagination .current {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border: 1px solid #007bff;
+}
+
+.pagination .step-links {
+  display: flex;
+  align-items: center;
+}
+
+/* Adjust the padding and margin to create space between the navbar and form */
+.mt-5 {
+  margin-top: 50px;
+}
+
+.card {
+  margin: 0 auto;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.login-card {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+
+.login-title {
+  color: #343a40;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-control {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.login-link {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.login-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.signup-card {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+
+.signup-title {
+  color: #343a40;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-control {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.login-link {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.login-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+/* My blogs */
+
+
+

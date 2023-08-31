@@ -1,38 +1,9 @@
 {% extends "base2.html" %}
-<!DOCTYPE html>
 {% load static %}
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Category Blogs</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{% static '/assets/css/style2.css' %}">
-</head>
-<body>
+
 
 {% block content %} 
 <style>
-
-.image-container {
-  height: 200px; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-
-.image-container img {
-  object-fit: contain; 
-  width: 100%;
-  height: 100%;
-}
-
-.card-body {
-  height: 220px; 
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 </style>
 
@@ -60,7 +31,7 @@
         
         <div class="card-body">
           <h3 class="card-title">{{ category.name }}</h3>
-          <p class="card-text">{{ category.content|slice:":125" }} ...</p>
+          <p class="card-text">{{ category.content|truncatechars:100 }}</p>
           <a href="{% url 'category_blogs' category.id %}" class="btn btn-warning">View</a>
         </div>
       </div>

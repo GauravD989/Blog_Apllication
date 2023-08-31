@@ -6,41 +6,62 @@
 {% block content %} 
 
 <style>
+  .read-more-container {
+    display: flex;
+    justify-content: center;
+    padding: 2px;
+    margin-top: 10px;
+  }
 
-.read-more-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
+  .read-more-card {
+    width: 94%; /* Adjust as needed */
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    max-width: 1600px;
+  }
 
-.read-more-card {
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  width: 100%;
-}
+  .comments-section {
+    width: 35%;
+    padding: 22px;
+    margin-top: 24px;
+    margin-left: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa;
+  }
 
-.read-more-title {
-  color: #dc3545;
-  font-size: 24px;
-  margin-bottom: 10px;
-}
+  .comment-box {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+  }
 
-.read-more-author {
-  color: #343a40;
-  font-size: 16px;
-  margin-bottom: 20px;
-}
+  .comment-box textarea {
+    width: 100%;
+    min-height: 100px;
+    border: none;
+    resize: vertical;
+  }
 
-.read-more-content {
-  color: #6c757d;
-  font-size: 18px;
-  line-height: 1.6;
-}
+  .comment-btn {
+    width: 100%;
+  }
 
+  /* Style for the show comments button */
+  .show-comments-btn {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    color: white;
+    background-color: #007bff; /* Blue background color */
+    border: 1px solid #007bff; /* Blue border color */
+    padding: 5px 10px; /* Add padding to match button styling */
+    border-radius: 4px;
+    display: inline-block; /* Display as inline element */
+  }
 </style>
 
 {% endblock content %}
@@ -48,6 +69,7 @@
 {% block body %}
 
 <div class="read-more-container">
+  
   <div class="read-more-card">
     <h3 class="read-more-title">{{ data.title }}</h3>
     <h5 class="read-more-author">Written by {{ data.author }}</h5>
@@ -55,16 +77,48 @@
     <div class="read-more-content">
       {{ data.content|safe }}
     </div>
-    <div><br>
-    {% for tag in data.tags.all %}
-      <a href="/tags/{{tag.id}}/" class="badge badge-primary">
-        {{tag}}
-      </a>
-    {% endfor %}
-  </div>
+    
+    <div class="read-more-tags">
+      {% for tag in data.tags.all %}
+        <a href="/tags/{{tag.id}}/" class="badge badge-primary">
+          {{tag}}
+        </a>
+      {% endfor %}
+    </div>
   </div>
 
-  
 </div>
+
+<div class="comments-section">
+  <p class="show-comments-btn">Add Comment</p>
+  
+  <div class="comment-box" id="post-comments-section" style="display: none;">
+    <form method="post" action="{% url 'readmore' data.id %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-primary comment-btn">Post Comment</button>
+    </form>
+  </div>
+
+  <h4>Comments</h4>
+  {% for comment in comments %}
+    <div class="comment-box">
+      <p>{{ comment.content }}</p>
+      <small>By {{ comment.user.username }} on {{ comment.timestamp }}</small>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const showCommentsBtn = document.querySelector(".show-comments-btn");
+    const postCommentsSection = document.querySelector("#post-comments-section");
+    
+    showCommentsBtn.addEventListener("click", function() {
+      postCommentsSection.style.display = "block"; // Show "Post Comments" section
+      showCommentsBtn.style.display = "none"; // Hide the "Add Comment" button
+    });
+  });
+</script>
 
 {% endblock body %}

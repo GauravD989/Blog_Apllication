@@ -1,0 +1,114 @@
+{% extends 'dashboardbase.html' %}
+
+{% block title %}My Categories{% endblock title %}
+
+{% load static %}
+
+{% block body %}
+
+<style>
+
+    #table-own {
+      max-width: 1057px;
+      margin: 0 auto;
+      padding: 20px;
+      margin-right: 200px; 
+    }
+    .table {
+      font-size: 14px;
+    }
+    .dashboard-bg {
+      background: linear-gradient(to bottom, #007bff, #00bfff);
+    }
+    /* New style for blue text */
+    .blue-text {
+      color: #007bff;
+    }
+    
+    /* Add border to left and right sides */
+    .table-container {
+      border: 1px solid #ddd;
+    }
+    
+    .mb-4.blue-text {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    #add-blog-btn{
+      border: 2px solid black;
+      
+    }
+  
+  </style>
+
+{% endblock body %}
+
+{% block content %}
+<div class="table-container" id="table-own">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="mb-4 blue-text">My Categories <a class="nav-link" href="/addcategory/" id="add-blog-btn"><i class="fas fa-plus"></i></a></h2>
+                <table class="table table-hover">
+                  <thead class="p-3 mb-2 bg-primary text-white">
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Author</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">View</th>
+                      <th scope="col">Edit</th>
+                      <th scope="col">Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for blog_category in page_obj %}
+                    <tr>
+                      <td>{{ blog_category.name }}</td>
+                      <td>{{ blog_category.author.username }}</td>
+                      <td>Active</td>
+                      <td>
+                        <a href="/category/{{blog_category.id}}/blogs/" class="btn btn-light">
+                          <i class="fas fa-eye"></i>
+                        </a>
+                      </td>
+                      <td>
+                        <a href="/edit-category/{{blog_category.id}}/" class="btn btn-light">
+                          <i class="fas fa-pen-to-square"></i>
+                        </a>
+                      </td>
+                      <td>
+                        <a href="/delete-category/{{blog_category.id}}/" class="btn btn-danger">
+                          <i class="fas fa-trash"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                
+
+                <div class="pagination mt-4">
+                  <span class="step-links">
+                    {% if page_obj.has_previous %}
+                      <a href="?page=1">&laquo; first</a>
+                      <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                      <a href="?page={{ page_obj.next_page_number }}">next</a>
+                      <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                  </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

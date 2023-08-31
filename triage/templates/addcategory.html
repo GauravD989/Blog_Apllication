@@ -1,0 +1,61 @@
+{% extends 'dashboardbase.html' %}
+
+{% block title %}Add Category{% endblock title %}
+
+{% load static %}
+
+{% block body %}
+<style>
+  #table-own {
+    max-width: 1057px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-right: 200px; 
+  }
+  .table {
+    font-size: 14px;
+  }
+  .dashboard-bg {
+    background: linear-gradient(to bottom, #007bff, #00bfff);
+  }
+  /* New style for blue text */
+  .blue-text {
+    color: #007bff;
+  }
+  
+  /* Add border to left and right sides */
+  .table-container {
+    border: 1px solid #ddd;
+  }
+</style>
+{% endblock body %}
+
+{% block content %}
+
+<div class="table-container" id="table-own">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+
+            {% for message in messages %}
+              <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+                <strong></strong>{{message}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+
+            <h3 class="text-dark">Add Category</h3><br>  
+
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button class="btn btn-primary">Post</button>
+            </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+

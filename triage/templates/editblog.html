@@ -1,35 +1,80 @@
-{% extends 'base2.html' %}
+{% extends 'dashboardbase.html' %}
 
 {% block title %}Edit Blog{% endblock title %}
 
 {% load static %}
 
-{% block content %}
-<style>
- 
-</style>
-{% endblock content %}
-
 {% block body %}
 
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card bg-light p-3">
+<style>
 
-        {% for message in messages %}
-          <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
-            <strong></strong>{{message}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
+  #table-own {
+    max-width: 1057px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-right: 200px; 
+  }
+  .table {
+    font-size: 14px;
+  }
+  .dashboard-bg {
+    background: linear-gradient(to bottom, #007bff, #00bfff);
+  }
+  /* New style for blue text */
+  .blue-text {
+    color: #007bff;
+  }
+  
+  /* Add border to left and right sides */
+  .table-container {
+    border: 1px solid #ddd;
+  }
+
+  .mb-4.blue-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #add-blog-btn{
+    border: 2px solid black;
+    
+  }
+</style>
+
+{% endblock body %}
+
+{% block content %}
+<div class="table-container" id="table-own">
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+        <!-- ... other form alerts ... -->
 
         <h3 class="text-dark">Edit Blog</h3><br>  
 
         <form method="POST" enctype="multipart/form-data">
           {% csrf_token %}
           {{ form.media }}
-          {{ form.as_p }}
+          {{ form.title.label_tag }}
+          {{ form.title }}<br><br>
+          {{ form.author.label_tag }}
+          {{ form.author }}<br><br>
+          {{ form.content.label_tag }}
+          {{ form.content }}<br><br>
+          {{ form.category.label_tag }}
+          {{ form.category }}<br>
+
+          If not in dropdown! Add Category:
+          <a href="/addcategory/">Add Category</a><br><br>
+          
+          {{ form.tags.label_tag }}
+          <input type="text" placeholder="write some tags" name="{{ form.tags.name }}" id="tags-input" value="{{ tag_names }}"><br><br>
+          
+
+          {{ form.image.label_tag }}<br>
+          {{ form.image }}<br><br>
+
           <button class="btn btn-primary">Update</button>
         </form>
 
@@ -38,5 +83,17 @@
   </div>
 </div>
 
-{% endblock body %}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var inputElm = document.getElementById('tags-input');
+    var tagSuggestions = {{ tag_suggestions|safe }};
+    
+    // Initialize Tagify on the input field
+    var tagify = new Tagify(inputElm, {
+      enforceWhitelist: true,
+      whitelist: tagSuggestions, // Use tag suggestions provided by the context
+    });
+  });
+</script>
 
+{% endblock content %}

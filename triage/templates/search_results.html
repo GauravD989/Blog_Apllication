@@ -1,4 +1,5 @@
 {% extends "base2.html" %}
+{% load custom_filters %}  {# Load the custom_filters library #}
 {% block title %}
 Search Results
 {% endblock title %}
@@ -15,7 +16,7 @@ Search Results
             {% for blog in blogs %}
                 <li class="list-group-item">
                     <h4><a href="{% url 'readmore' id=blog.pk %}">{{ blog.title }}</a></h4>
-                    <p>{{ blog.content|safe|truncatechars:150 }}</p>
+                    <p>{{ blog.content|bleach_clean|truncatechars:550|safe }}</p>
                 </li>
             {% endfor %}
         </ul>
@@ -25,5 +26,3 @@ Search Results
 </div>
 
 {% endblock body %}
-
-
