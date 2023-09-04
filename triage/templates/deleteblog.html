@@ -1,45 +1,36 @@
-{% extends 'base2.html' %}
+{% extends 'dashboardbase.html' %}
 
 {% block title %}Add Blog{% endblock title %}
 
 {% load static %}
 
-{% block content %}
+{% block body %}
 <style>
  
 </style>
-{% endblock content %}
+{% endblock body %}
 
-{% block body %}
+{% block content %}
 
-<div class="container mt-5">
-  <div class="row justify-content-center">
+<div class="container mt-1">
+  <div class="row justify-content">
     <div class="col-md-6">
-      <div class="card bg-light p-3">
+      <div class="card p-3">
 
-        {% for message in messages %}
-          <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
-            <strong></strong>{{message}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
+        <h2 class="text-primary">Delete Blog</h2>
+        <p>Are you Sure! You want to delete this Blog <strong>"{{ blog.title }}"</strong>?</p>
 
-        <h3 class="text-danger">Delete Blog...</h3><br>
-
-        <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        <strong>Are you Sure?! You want to Delete this Blog.</strong><br/>
-        <button>Delete Blog!</button>
-
-
-    </form>
+        <form method="POST" action="{% url 'deleteblog' pk=blog.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Delete</button>
+          <a href="{% url 'my-blogs' %}" class="btn btn-secondary">Cancel</a>
+        </form>
 
       </div>
     </div>
   </div>
 </div>
 
-{% endblock body %}
+{% endblock content %}
 
 

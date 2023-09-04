@@ -17,10 +17,12 @@ urlpatterns = [
     path('editblog/<int:pk>/', Editblog.as_view(), name='editblog'),
     path('deleteblog/<int:pk>/', Deleteblog.as_view(), name='deleteblog'),
 
-    path('restoreblog/<int:pk>/', restore_blog, name='restore-blog'),
+    path('restoreblog/<int:pk>/', Restoreblog.as_view(), name='restoreblog'),
 
     path('category/<int:category_id>/blogs/', views.category_blogs, name='category_blogs'),
     path('myblogs/', views.my_blogs, name='my-blogs'),
+
+    path('my_deleted_blogs/', views.my_deleted_blogs, name='my_deleted_blogs'),
 
     path("tags/<int:tag_id>/", views.list_posts_by_tag, name="tag"),
     path('search/', views.search_blogs, name='search_blogs'),

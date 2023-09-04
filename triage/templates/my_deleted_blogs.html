@@ -1,7 +1,7 @@
 
 {% extends 'dashboardbase.html' %}
 
-{% block title %}My Blogs{% endblock title %}
+{% block title %}My Deleted Blog{% endblock title %}
 
 {% load static %}
 
@@ -54,7 +54,7 @@
         <div class="row">
             <div class="col-md-12">
                 <!-- Blue text style applied to "My Blogs" -->
-                <h2 class="mb-4 blue-text">My Blogs <a class="nav-link" href="/addblog/" id="add-blog-btn"><i class="fas fa-plus"></i></a></h2>
+                <h2 class="mb-4 blue-text">My Deleted Blogs <a class="nav-link" href="/addblog/" id="add-blog-btn"><i class="fas fa-plus"></i></a></h2>
                 
                 <table class="table table-hover">
                   <thead class="p-3 mb-2 bg-primary text-white">
@@ -64,7 +64,7 @@
                       <th scope="col">Status</th>
                       <th scope="col">View</th>
                       <th scope="col">Edit</th>
-                      <th scope="col">Delete</th>
+                      <th scope="col">Restore</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -72,7 +72,7 @@
                     <tr>
                       <td>{{ blog.title }}</td>
                       <td>{{ blog.author.username }}</td>
-                      <td>Active</td>
+                      <td>Unactive</td>
                       <td>
                         <a href="/readmore/{{blog.id}}/" class="btn btn-light">
                           <i class="fas fa-eye"></i>
@@ -84,8 +84,8 @@
                         </a>
                       </td>
                       <td>
-                        <a href="{% url 'deleteblog' pk=blog.id %}" class="btn btn-danger">
-                          <i class="fas fa-trash"></i>
+                        <a href="{% url 'restoreblog' pk=blog.pk %}" class="btn btn-success">
+                          <i class="fa fa-refresh"></i>
                         </a>
                       </td>
                     </tr>

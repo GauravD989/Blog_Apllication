@@ -1,0 +1,36 @@
+{% extends 'dashboardbase.html' %}
+
+{% block title %} Restore Deleted Blog{% endblock title %}
+
+{% load static %}
+
+{% block body %}
+<style>
+ 
+</style>
+{% endblock body %}
+
+{% block content %}
+
+<div class="container mt-1">
+    <div class="row justify-content">
+      <div class="col-md-6">
+        <div class="card p-3">
+
+            <h2 class="text-primary">Restore Deleted Blog...</h2>
+            <p>Are you Sure! You want to Restore this Deleted Blog <strong>"{{ blog.title }}"</strong>?</p>
+
+        <form method="POST" action="{% url 'restoreblog' pk=blog.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-success">Restore</button>
+          <a href="{% url 'my_deleted_blogs' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+

@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.models import User
-from blog.models import Blog, Category, Tag, Comment, DeletedBlog
+from blog.models import Blog, Category, Tag, Comment
+from django.views import View
 from math import ceil
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import CreateView, UpdateView
@@ -38,7 +39,7 @@ def home(request):
 def my_blogs(request):
     if request.user.is_authenticated:
         user = request.user
-        blogs = Blog.objects.filter(author=user).order_by('-created_at')  
+        blogs = Blog.objects.filter(author=user, is_deleted=False).order_by('-created_at')  
 
         blogs_per_page = 10
         paginator = Paginator(blogs, blogs_per_page)
@@ -70,6 +71,24 @@ def category_blogs(request, category_id):
         'page_obj' : page_obj,
     }
     return render(request, 'category_blogs.html', context)
+
+def my_deleted_blogs(request):
+    if request.user.is_authenticated:
+        user = request.user
+        blogs = Blog.objects.filter(author=user, is_deleted=True).order_by('-created_at')
+
+        blogs_per_page = 10
+        paginator = Paginator(blogs, blogs_per_page)
+
+        page_number = request.GET.get('page')
+        
+        # Get the blogs for the current page
+        page_obj = paginator.get_page(page_number)
+
+        context = {'page_obj': page_obj}
+        return render(request, 'my_deleted_blogs.html', context)
+    else:
+        return redirect('login')
 
 def list_posts_by_tag(request, tag_id):
 
@@ -365,40 +384,51 @@ class Editblog(UpdateView):
         return context
 
 
-class CustomDeleteView(DeleteView, FormMixin):
-    def form_valid(self, form):
-        # Get the specific blog
-        self.object = self.get_object()
-        print(self.object)
-
-        # Move the blog to DeletedBlog model for soft deletion
-        deleted_blog = DeletedBlog.objects.create(
-            title=self.object.title,
-            content=self.object.content,
-            category=self.object.category,
-            author=self.object.author,
-            image=self.object.image,
-        )
-
-        deleted_blog.tags.set(self.object.tags.all())
-        print(deleted_blog)
-
-        # Mark the blog as deleted and save
-        self.object.is_restored = False
-        self.object.save()
-
-        self.object.delete() # delete the blog from Blog Model
-
-        return HttpResponseRedirect(self.get_success_url())
-
-class Deleteblog(CustomDeleteView):
-    model = Blog
+class Deleteblog(View):
     template_name = "deleteblog.html"
     success_url = reverse_lazy('my-blogs')
+
+    def get(self, request, pk):
+        # Retrieve the blog post to be deleted
+        blog = get_object_or_404(Blog, pk=pk)
+        context = {'blog': blog}
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk):
+        # Retrieve the blog post to be deleted
+        blog = get_object_or_404(Blog, pk=pk)
+
+        # Soft delete the blog post by marking it as deleted
+        blog.is_deleted = True
+        blog.save()
+
+        # Redirect to the success URL
+        return redirect(self.success_url)
+    
+class Restoreblog(View):
+    template_name = "restore_blog.html"
+    success_url = reverse_lazy('my-blogs')
+
+    def get(self, request, pk):
+        # Retrieve the blog post to be deleted
+        blog = get_object_or_404(Blog, pk=pk)
+        context = {'blog': blog}
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk):
+        # Retrieve the blog post to be deleted
+        blog = get_object_or_404(Blog, pk=pk)
+
+        # Soft delete the blog post by marking it as deleted
+        blog.is_deleted = False
+        blog.save()
+
+        # Redirect to the success URL
+        return redirect(self.success_url)
     
 
-def restore_blog(request, pk):
-    deleted_blog = DeletedBlog.objects.get(pk=pk)
-    deleted_blog.restore()
-    return redirect('my-blogs')
+# def restore_blog(request, pk):
+#     deleted_blog = DeletedBlog.objects.get(pk=pk)
+#     deleted_blog.restore()
+#     return redirect('my-blogs')
 
