@@ -33,4 +33,9 @@ urlpatterns = [
 
     path('edit-category/<int:pk>/', views.edit_category, name='edit-category'),
     path('delete-category/<int:pk>/', views.delete_category, name='delete-category'),
+
+
+    path('save-comment/', views.save_comment, name='save-comment'),
+
+
 ]

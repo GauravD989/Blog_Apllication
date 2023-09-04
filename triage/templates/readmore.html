@@ -5,73 +5,48 @@
 {% load static %}
 {% block content %} 
 
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+
 <style>
-  .read-more-container {
-    display: flex;
-    justify-content: center;
-    padding: 2px;
-    margin-top: 10px;
-  }
 
-  .read-more-card {
-    width: 94%; /* Adjust as needed */
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    max-width: 1600px;
-  }
 
-  .comments-section {
-    width: 35%;
-    padding: 22px;
-    margin-top: 24px;
-    margin-left: 50px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+#readmore{
+  width: 127%;
+  max-width: 1251px;
+}
+
+.read-more-card {
     background-color: #f8f9fa;
-  }
+    padding: 21px;
+    border-radius: 9px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 1078px;
+    width: 120%;
 
-  .comment-box {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-  }
+}
 
-  .comment-box textarea {
-    width: 100%;
-    min-height: 100px;
-    border: none;
-    resize: vertical;
-  }
+.card-body {
+  height: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  .comment-btn {
-    width: 100%;
-  }
 
-  /* Style for the show comments button */
-  .show-comments-btn {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    cursor: pointer;
-    color: white;
-    background-color: #007bff; /* Blue background color */
-    border: 1px solid #007bff; /* Blue border color */
-    padding: 5px 10px; /* Add padding to match button styling */
-    border-radius: 4px;
-    display: inline-block; /* Display as inline element */
-  }
 </style>
 
 {% endblock content %}
 
 {% block body %}
 
-<div class="read-more-container">
+<div class="container">
+
+<div class="container" id='readmore'><br>
   
-  <div class="read-more-card">
-    <h3 class="read-more-title">{{ data.title }}</h3>
+  <div class="read-more-card" style="background-color: #eee;">
+    <h3 class="read-more-title text-primary">{{ data.title }}</h3>
     <h5 class="read-more-author">Written by {{ data.author }}</h5>
     
     <div class="read-more-content">
@@ -89,40 +64,111 @@
 
 </div>
 
-<div class="comments-section">
-  <p class="show-comments-btn">Add Comment</p>
-  
-  <div class="comment-box" id="post-comments-section" style="display: none;">
-    <form method="post" action="{% url 'readmore' data.id %}">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button class="btn btn-primary comment-btn">Post Comment</button>
-    </form>
-  </div>
-</div>
+<section>
+  <br><br>
+  <h6 class="card-header">
+    Comments
+    <span id="show-comment-form" style="cursor: pointer; color: blue; font-size: 17px; float: right;">+ Add +</span>
+  </h6>
 
-<h3 class="my-4">Comments</h3>
-<div class="comment-wrapper">
-  {% for comment in comments %}
-    <div class="card mb-2">
-      <div class="card-body">
-        <p>{{ comment.content }}</p>
-        <small>By {{ comment.user.username }} on {{ comment.timestamp }}</small>
+  <div id="comment-form" style="display: none;">
+    {% if user.is_authenticated %}
+      <!-- Comment Form -->
+      <div class="card my-3">
+        <div class="card-header">Add Comment</div>
+        <div class="card-body">
+          <textarea class="form-control comment-text"></textarea>
+          <button type="button" data-data="{{data.id}}" class="btn btn-dark my-3 save-comment">Post Comment</button>
+        </div>
       </div>
-    </div>
-  {% endfor %}
+    {% endif %}
+  </div>
+
+  <div>
+
+    {% for comment in comments %}
+      <div class="card my-3" id="newa">
+        <div class="card-body">
+          <div class="d-flex flex-start align-items-center">
+            <div>
+              <h6 class="fw-bold text-primary mb-1">{{ comment.user.username }}</h6>
+              <p class="text-muted small mb-0">
+                Shared publicly - on {{ comment.timestamp }}
+              </p>
+            </div>
+          </div>
+          <p class="mt-3 mb-4 pb-2">
+            {{ comment.content|truncatechars:400 }}
+          </p>
+        </div>
+      </div>
+    {% endfor %}
+
+  </div>
+</section>
+
 </div>
 
+<script src="{% static '/assets/javascript/code.jquery.com_jquery-3.7.1.min.js' %}"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const showCommentsBtn = document.querySelector(".show-comments-btn");
-    const postCommentsSection = document.querySelector("#post-comments-section");
-    
-    showCommentsBtn.addEventListener("click", function() {
-      postCommentsSection.style.display = "block"; // Show "Post Comments" section
-      showCommentsBtn.style.display = "none"; // Hide the "Add Comment" button
+
+  $(document).ready(function(){
+    $("#show-comment-form").on('click', function(){
+      $("#comment-form").toggle(); // Toggle the visibility of the comment form
+    });
+
+    $(".save-comment").on('click', function(){
+      var _comment = $(".comment-text").val();
+      var _dataid = $(this).data('data');
+      
+      // Ajax
+      $.ajax({
+        url: "/save-comment/",
+        type: 'post',
+        data: {
+          comment: _comment,
+          dataid: _dataid,
+          csrfmiddlewaretoken: "{{ csrf_token }}"
+        },
+        dataType: 'json',
+        
+        beforeSend: function(){
+          $(".save-comment").addClass('disabled').text('saving...');
+        },
+        
+        success: function(res) {
+          if (res.bool == true) {
+            $(".comment-text").val('');
+        
+            // Create a new comment element
+            var _html = '\
+            <div class="card-body">\
+              <div class="d-flex flex-start align-items-center">\
+                <div>\
+                  <h6 class="fw-bold text-primary mb-1">{{ request.user }}</h6>\
+                  <p class="text-muted small mb-0">\
+                    Shared publicly - on ' + res.timestamp + '\
+                  </p>\
+                </div>\
+                \
+              </div>\
+              <p class="mt-3 mb-4 pb-2">\
+                ' + _comment + '\
+              </p>\
+            </div>';
+        
+            // Insert the new comment after the existing comments
+            $("#newa").prepend(_html);
+          }
+          $(".save-comment").removeClass('disabled').text('Submit');
+        }
+        
+      });
     });
   });
+  
+
 </script>
+
 
 {% endblock body %}

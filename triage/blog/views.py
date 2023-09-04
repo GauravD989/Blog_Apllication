@@ -142,7 +142,7 @@ def signup(request):
         
         try:
             if User.objects.get(username=username):
-                messages.info(request, 'Email is Taken')
+                messages.info(request, 'Username is Taken')
                 return render(request, 'signup.html')
 
         except Exception as identifier:
@@ -200,6 +200,24 @@ def readmore(request, id):
     context = {'data': blog, 'comments': comments, 'form': form}
 
     return render(request, 'readmore.html', context)
+
+# As we have used Ajax, we have added a fuction save_comment, it will saved the comments in the database
+def save_comment(request):
+    if request.method=='POST':
+        comment = request.POST['comment']
+        dataid = request.POST['dataid']
+        data = Blog.objects.get(pk=dataid)
+        user=request.user
+        
+        comment_obj = Comment.objects.create(
+                        blog = data,
+                        user = user,
+                        content = comment
+                    )
+
+        formatted_timestamp = comment_obj.timestamp.strftime("%b. %d, %Y, %I:%M %p")
+       
+        return JsonResponse({'bool': True, 'timestamp': formatted_timestamp})
 
 def my_categories(request):
     categories = Category.objects.filter(author=request.user).order_by('-created_at')    # Get the user's categories
