@@ -74,17 +74,17 @@
                       <td>{{ blog.author.username }}</td>
                       <td>Unactive</td>
                       <td>
-                        <a href="/readmore/{{blog.id}}/" class="btn btn-light">
+                        <a href="/readmore/{{blog.slug}}/" class="btn btn-light">
                           <i class="fas fa-eye"></i>
                         </a>
                       </td>
                       <td>
-                        <a href="/editblog/{{blog.id}}/" class="btn btn-light">
+                        <a href="/editblog/{{blog.slug}}/" class="btn btn-light">
                           <i class="fas fa-pen-to-square"></i>
                         </a>
                       </td>
                       <td>
-                        <a href="{% url 'restoreblog' pk=blog.pk %}" class="btn btn-success">
+                        <a href="{% url 'restoreblog' slug=blog.slug %}" class="btn btn-success">
                           <i class="fa fa-refresh"></i>
                         </a>
                       </td>

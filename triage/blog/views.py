@@ -54,8 +54,8 @@ def my_blogs(request):
     else:
         return redirect('login')
     
-def category_blogs(request, category_id):
-    category = get_object_or_404(Category, pk=category_id)
+def category_blogs(request, slug):
+    category = get_object_or_404(Category, slug=slug)
 
     blogs = Blog.objects.filter(category=category).order_by('-created_at')
 
@@ -90,11 +90,11 @@ def my_deleted_blogs(request):
     else:
         return redirect('login')
 
-def list_posts_by_tag(request, tag_id):
+def list_posts_by_tag(request, slug):
 
-    tag = get_object_or_404(Tag, id=tag_id)
-
-    posts = Blog.objects.filter(tags=tag_id).order_by('-created_at')
+    tag = get_object_or_404(Tag, slug=slug)
+    
+    posts = Blog.objects.filter(tags__slug=slug).order_by('-created_at')
 
     items_per_page = 9  
     
@@ -198,8 +198,8 @@ def handlelogout(request):
     messages.warning(request, "You have successfully logged out")
     return redirect('/login/')
 
-def readmore(request, id):
-    blog = Blog.objects.get(id=id)
+def readmore(request, slug):
+    blog = Blog.objects.get(slug=slug)
 
     comments = Comment.objects.filter(blog=blog).order_by('-timestamp')
     
@@ -212,7 +212,7 @@ def readmore(request, id):
             comment.blog = blog
             comment.save()
             
-            return redirect('readmore', id=id)
+            return redirect('readmore', slug=slug)
     else:
         form = CommentForm()
 
@@ -254,8 +254,8 @@ def my_categories(request):
     return render(request, 'my_categories.html', context)
     
 
-def edit_category(request, pk):
-    category = get_object_or_404(Category, pk=pk)
+def edit_category(request, slug):
+    category = get_object_or_404(Category, slug=slug)
 
     if request.method == 'POST':
         form = CategoryForm(request.POST, instance=category)  
@@ -268,8 +268,8 @@ def edit_category(request, pk):
     context = {'form': form}
     return render(request, 'edit_category.html', context)
 
-def delete_category(request, pk):
-    category = get_object_or_404(Category, pk=pk)
+def delete_category(request, slug):
+    category = get_object_or_404(Category, slug=slug)
 
     if request.method == 'POST':
         category.delete()
@@ -388,15 +388,15 @@ class Deleteblog(View):
     template_name = "deleteblog.html"
     success_url = reverse_lazy('my-blogs')
 
-    def get(self, request, pk):
+    def get(self, request, slug):
         # Retrieve the blog post to be deleted
-        blog = get_object_or_404(Blog, pk=pk)
+        blog = get_object_or_404(Blog, slug=slug)
         context = {'blog': blog}
         return render(request, self.template_name, context)
 
-    def post(self, request, pk):
+    def post(self, request, slug):
         # Retrieve the blog post to be deleted
-        blog = get_object_or_404(Blog, pk=pk)
+        blog = get_object_or_404(Blog, slug=slug)
 
         # Soft delete the blog post by marking it as deleted
         blog.is_deleted = True
@@ -409,15 +409,15 @@ class Restoreblog(View):
     template_name = "restore_blog.html"
     success_url = reverse_lazy('my-blogs')
 
-    def get(self, request, pk):
+    def get(self, request, slug):
         # Retrieve the blog post to be deleted
-        blog = get_object_or_404(Blog, pk=pk)
+        blog = get_object_or_404(Blog, slug=slug)
         context = {'blog': blog}
         return render(request, self.template_name, context)
 
-    def post(self, request, pk):
+    def post(self, request, slug):
         # Retrieve the blog post to be deleted
-        blog = get_object_or_404(Blog, pk=pk)
+        blog = get_object_or_404(Blog, slug=slug)
 
         # Soft delete the blog post by marking it as deleted
         blog.is_deleted = False

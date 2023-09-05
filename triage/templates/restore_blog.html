@@ -20,7 +20,7 @@
             <h2 class="text-primary">Restore Deleted Blog...</h2>
             <p>Are you Sure! You want to Restore this Deleted Blog <strong>"{{ blog.title }}"</strong>?</p>
 
-        <form method="POST" action="{% url 'restoreblog' pk=blog.pk %}">
+        <form method="POST" action="{% url 'restoreblog' slug=blog.slug %}">
           {% csrf_token %}
           <button type="submit" class="btn btn-success">Restore</button>
           <a href="{% url 'my_deleted_blogs' %}" class="btn btn-secondary">Cancel</a>

@@ -55,7 +55,7 @@
     
     <div class="read-more-tags">
       {% for tag in data.tags.all %}
-        <a href="/tags/{{tag.id}}/" class="badge badge-primary">
+        <a href="/tags/{{tag.slug}}/" class="badge badge-primary">
           {{tag}}
         </a>
       {% endfor %}

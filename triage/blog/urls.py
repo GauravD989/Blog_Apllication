@@ -9,22 +9,22 @@ urlpatterns = [
     path('login/', views.handlelogin, name='handlelogin'),
     path('logout/', views.handlelogout, name='handlelogout'),
 
-    path('readmore/<int:id>/', views.readmore, name='readmore'),
+    path('readmore/<slug:slug>/', views.readmore, name='readmore'), # check
     path('addblog/', Addblog.as_view(), name='addblog'),
 
     path('tag-suggestions/', views.get_tag_suggestions, name='tag-suggestions'),
 
-    path('editblog/<int:pk>/', Editblog.as_view(), name='editblog'),
-    path('deleteblog/<int:pk>/', Deleteblog.as_view(), name='deleteblog'),
+    path('editblog/<slug:slug>/', Editblog.as_view(), name='editblog'), #check
+    path('deleteblog/<slug:slug>/', Deleteblog.as_view(), name='deleteblog'), #check
 
-    path('restoreblog/<int:pk>/', Restoreblog.as_view(), name='restoreblog'),
+    path('restoreblog/<slug:slug>/', Restoreblog.as_view(), name='restoreblog'), #check
 
-    path('category/<int:category_id>/blogs/', views.category_blogs, name='category_blogs'),
+    path('category/<slug:slug>/blogs/', views.category_blogs, name='category_blogs'), #check
     path('myblogs/', views.my_blogs, name='my-blogs'),
 
     path('my_deleted_blogs/', views.my_deleted_blogs, name='my_deleted_blogs'),
 
-    path("tags/<int:tag_id>/", views.list_posts_by_tag, name="tag"),
+    path("tags/<slug:slug>/", views.list_posts_by_tag, name="tag"), #check
     path('search/', views.search_blogs, name='search_blogs'),
 
     path('dashboard/', views.dashboard, name='dashboard'),
@@ -33,8 +33,8 @@ urlpatterns = [
 
     path('my-categories/', views.my_categories, name='my-categories'),
 
-    path('edit-category/<int:pk>/', views.edit_category, name='edit-category'),
-    path('delete-category/<int:pk>/', views.delete_category, name='delete-category'),
+    path('edit-category/<slug:slug>/', views.edit_category, name='edit-category'), #check
+    path('delete-category/<slug:slug>/', views.delete_category, name='delete-category'), #check
 
 
     path('save-comment/', views.save_comment, name='save-comment'),

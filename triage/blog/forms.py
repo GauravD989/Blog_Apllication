@@ -5,13 +5,13 @@ class BlogForm(forms.ModelForm):
 
     class Meta:
         model = Blog
-        fields = ['title', 'author', 'content', 'category', 'tags', 'image']
+        fields = ['title', 'author', 'content', 'category', 'tags', 'image', 'slug']
 
 
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = ['name', 'content', 'image'] 
+        fields = ['name', 'content', 'image', 'slug'] 
 
 class CommentForm(forms.ModelForm):
     class Meta:

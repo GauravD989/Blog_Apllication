@@ -20,7 +20,7 @@
         <h2 class="text-primary">Delete Blog</h2>
         <p>Are you Sure! You want to delete this Blog <strong>"{{ blog.title }}"</strong>?</p>
 
-        <form method="POST" action="{% url 'deleteblog' pk=blog.pk %}">
+        <form method="POST" action="{% url 'deleteblog' slug=blog.slug %}">
           {% csrf_token %}
           <button type="submit" class="btn btn-danger">Delete</button>
           <a href="{% url 'my-blogs' %}" class="btn btn-secondary">Cancel</a>

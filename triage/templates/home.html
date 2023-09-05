@@ -32,7 +32,7 @@
         <div class="card-body">
           <h3 class="card-title">{{ category.name }}</h3>
           <p class="card-text">{{ category.content|truncatechars:100 }}</p>
-          <a href="{% url 'category_blogs' category.id %}" class="btn btn-warning">View</a>
+          <a href="{% url 'category_blogs' slug=category.slug %}" class="btn btn-warning">View</a>
         </div>
       </div>
     </div>
