@@ -8,7 +8,7 @@ from django.utils.text import slugify  # Import slugify function
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
-    slug = models.SlugField(unique=True, allow_unicode=True, default='')
+    slug = models.SlugField(unique=True, allow_unicode=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -28,7 +28,7 @@ class Category(models.Model):
 
     image = models.ImageField(upload_to='category/images', blank=True, null=True, default="")
 
-    slug = models.SlugField(unique=True, allow_unicode=True, default='')
+    slug = models.SlugField(unique=True, allow_unicode=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -53,7 +53,7 @@ class Blog(models.Model):
 
     is_deleted = models.BooleanField(default=False)
     
-    slug = models.SlugField(unique=True, allow_unicode=True, default='')
+    slug = models.SlugField(unique=True, allow_unicode=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:

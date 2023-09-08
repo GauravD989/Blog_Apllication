@@ -52,17 +52,11 @@ body {
   font-size: 14px;
 }
 .dashboard-bg {
-  background: linear-gradient(to bottom, #007bff, #00bfff);
+  background: linear-gradient(to bottom, #e0e8f0, #859292);
 }
 .clickable-link {
   cursor: pointer;
-  transition: color 0.3s; /* Add transition for smooth color change */
-  color: #000; /* Set initial text color */
 }
-.clickable-link:hover {
-  color: #555; /* Change text color on hover */
-}
-
 /* Readmore CSS */
 
 

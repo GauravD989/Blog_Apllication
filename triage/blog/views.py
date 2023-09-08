@@ -8,7 +8,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.generic import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404
-from django.views.generic.edit import FormMixin,DeleteView
+
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from .utils import TokenGenerator, generate_token
+from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 from django.core.paginator import Paginator
 
@@ -57,7 +63,7 @@ def my_blogs(request):
 def category_blogs(request, slug):
     category = get_object_or_404(Category, slug=slug)
 
-    blogs = Blog.objects.filter(category=category).order_by('-created_at')
+    blogs = Blog.objects.filter(category=category, is_deleted=False).order_by('-created_at')
 
     items_per_page = 9  
     
@@ -94,7 +100,7 @@ def list_posts_by_tag(request, slug):
 
     tag = get_object_or_404(Tag, slug=slug)
     
-    posts = Blog.objects.filter(tags__slug=slug).order_by('-created_at')
+    posts = Blog.objects.filter(tags__slug=slug, is_deleted=False).order_by('-created_at')
 
     items_per_page = 9  
     
@@ -152,6 +158,7 @@ def dashboard(request):
 def signup(request):
     if request.method=="POST":
         username=request.POST['username']
+        email=request.POST['email']
         password=request.POST['pass1']
         confirm_password=request.POST['pass2']
         
@@ -167,13 +174,42 @@ def signup(request):
         except Exception as identifier:
             pass
          
-        user = User.objects.create_user(username, username, password)
+        user = User.objects.create_user(username, email, password)
+        user.is_active=False
         user.save()
+
+        email_subject = "Activate Your Account"
+        message = render_to_string('activate.html', {
+            'user':user,
+            'domain':'127.0.0.1:8000', # if i am hosting to www.google.com, then i have write this domain here, Not '127.0.0.1:8000' : localhost
+            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+            'token':generate_token.make_token(user)
+        })
+
+        email_message = EmailMessage(email_subject,message, settings.EMAIL_HOST_USER, [email])
+
+        email_message.send()
+
+        messages.success(request,"Activate Your Account by clicking the link in your email")
         
-        messages.success(request,"Welcome! {} Your account is created successfully". format(user.username))
+        # messages.success(request,"Welcome! {} Your account is created successfully". format(user.username))
         return redirect('/login/')
         
     return render(request, 'signup.html')
+
+class ActivateAccountView(View):
+    def get(self, request, uidb64, token):
+        try:
+            uid=force_text(urlsafe_base64_decode(uidb64))
+            user=User.objects.get(pk=uid)
+        except Exception as identifier:
+            user=None
+        if user is not None and generate_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+            messages.info(request,"Account Activated Successfully")        
+            return redirect('/login/')
+        return render(request, 'activatefail.html')
 
 
 def handlelogin(request):
@@ -199,7 +235,7 @@ def handlelogout(request):
     return redirect('/login/')
 
 def readmore(request, slug):
-    blog = Blog.objects.get(slug=slug)
+    blog = Blog.objects.get(slug=slug, is_deleted=False)
 
     comments = Comment.objects.filter(blog=blog).order_by('-timestamp')
     
