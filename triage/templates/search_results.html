@@ -15,7 +15,7 @@ Search Results
         <ul class="list-group">
             {% for blog in blogs %}
                 <li class="list-group-item">
-                    <h4><a href="{% url 'readmore' id=blog.pk %}">{{ blog.title }}</a></h4>
+                    <h4><a href="{% url 'readmore' slug=blog.slug %}">{{ blog.title }}</a></h4>
                     <p>{{ blog.content|bleach_clean|truncatechars:550|safe }}</p>
                 </li>
             {% endfor %}
